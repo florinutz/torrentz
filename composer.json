@@ -1,0 +1,8 @@
+{
+    "require": {
+        "flo/nimic": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"Flo\\Torrentz\\": "src/"}
+    }
+}
