@@ -1,4 +1,5 @@
 <?php
 require "vendor/autoload.php";
+use Flo\Torrentz\Nimic\Kernel;
 
-$kernel = new \Flo\Nimic\Kernel\NimiKernel();
+$kernel = new Kernel();
