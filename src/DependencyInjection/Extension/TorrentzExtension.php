@@ -1,6 +1,6 @@
 <?php
 // florin, 10/7/14, 8:10 PM
-namespace Flo\Nimic\DependencyInjection\Extension;
+namespace Flo\Torrentz\DependencyInjection\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

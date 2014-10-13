@@ -3,7 +3,7 @@
         "flo/nimic": "dev-master",
         "symfony/filesystem": "~2.5",
         "symfony/stopwatch": "~2.5",
-        "symfony/yaml": "~2.5",
+        "symfony/yaml": "2.*",
         "symfony/dom-crawler": "~2.5",
         "guzzlehttp/guzzle": "4.*",
         "guzzlehttp/log-subscriber": "~1.0",
