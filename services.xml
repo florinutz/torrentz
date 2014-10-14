@@ -4,4 +4,13 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="db.config" type="collection">
+            <parameter key="dbname">torrentz</parameter>
+            <parameter key="user">root</parameter>
+            <parameter key="password">***</parameter>
+            <parameter key="host">localhost</parameter>
+            <parameter key="driver">pdo_mysql</parameter>
+        </parameter>
+    </parameters>
 </container>

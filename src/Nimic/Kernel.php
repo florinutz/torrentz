@@ -10,12 +10,15 @@ use Doctrine\ORM\EntityManager;
 class Kernel extends NimiKernel
 {
     protected $name = 'Torrentz';
+
     protected $version = '0.1';
+
+    /** @var EntityManager */
+    protected $em;
 
     function __construct($debug=false, $cacheDir=null)
     {
         parent::__construct($debug, $cacheDir);
-        $this->initDoctrine();
     }
 
     protected function getExtensions()
@@ -25,7 +28,11 @@ class Kernel extends NimiKernel
         return $extensions;
     }
 
-    public function initDoctrine()
+    /**
+     * @param array $connectionParams
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function initEntityManager(array $connectionParams)
     {
         $config = Setup::createAnnotationMetadataConfiguration([__DIR__."/src"], $this->isDebug());
         $connectionParams = [
@@ -33,7 +40,7 @@ class Kernel extends NimiKernel
             'user' => 'root',
             'password' => '****',
             'host' => 'localhost',
-            'driver' => 'pdo_mysql',
+            'driver' => 'mysqli',
         ];
         $entityManager = EntityManager::create($connectionParams, $config);
     }
