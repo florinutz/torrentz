@@ -2,10 +2,12 @@
 // florin, 10/7/14, 8:10 PM
 namespace Flo\Torrentz\DependencyInjection\Extension;
 
+use Flo\Torrentz\DependencyInjection\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Definition\Processor;
 
 class TorrentzExtension implements ExtensionInterface
 {
@@ -13,6 +15,13 @@ class TorrentzExtension implements ExtensionInterface
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../..'));
         $loader->load('services.xml');
+
+        /**
+         * todo load container config before compilation
+         */
+        $processor = new Processor();
+        $config = $processor->processConfiguration(new Configuration(), $configs);
+        return;
     }
 
     /**

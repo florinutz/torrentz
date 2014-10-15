@@ -7,7 +7,7 @@ use Flo\Torrentz\DependencyInjection\Extension\TorrentzExtension;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-class Kernel extends NimiKernel
+abstract class Kernel extends NimiKernel
 {
     protected $name = 'Torrentz';
 
@@ -44,4 +44,5 @@ class Kernel extends NimiKernel
         ];
         $entityManager = EntityManager::create($connectionParams, $config);
     }
+
 }

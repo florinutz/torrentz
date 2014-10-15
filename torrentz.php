@@ -1,6 +1,19 @@
 <?php
 require "vendor/autoload.php";
-use Flo\Torrentz\Nimic\Kernel;
 
-$kernel = new Kernel();
+class MyKernel extends Flo\Torrentz\Nimic\Kernel
+{
+    function getConfigFile()
+    {
+        return $this->getRootDir() . '/config.yml';
+    }
+
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+}
+
+$kernel = new \MyKernel();
+$params = $kernel->getContainer()->getParameterBag()->all();
 $kernel->getApplication()->run();
