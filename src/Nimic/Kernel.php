@@ -6,6 +6,7 @@ use Flo\Nimic\Kernel\NimiKernel;
 use Flo\Torrentz\DependencyInjection\Extension\TorrentzExtension;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 abstract class Kernel extends NimiKernel
 {
@@ -23,26 +24,30 @@ abstract class Kernel extends NimiKernel
 
     protected function getExtensions()
     {
+        // keep the existing ones so that Nimic doesn't break
         $extensions = parent::getExtensions();
         $extensions[] = new TorrentzExtension();
         return $extensions;
     }
 
+    protected function addKernelParametersToContainer($container)
+    {
+        parent::addKernelParametersToContainer($container);
+        $this->loadConfigResourcesIntoContainer($container);
+    }
+
     /**
      * @param array $connectionParams
+     * @return \Doctrine\ORM\EntityManager
      * @throws \Doctrine\ORM\ORMException
      */
-    protected function initEntityManager(array $connectionParams)
+    protected function getEntityManager(array $connectionParams)
     {
-        $config = Setup::createAnnotationMetadataConfiguration([__DIR__."/src"], $this->isDebug());
-        $connectionParams = [
-            'dbname' => 'torrentz',
-            'user' => 'root',
-            'password' => '****',
-            'host' => 'localhost',
-            'driver' => 'mysqli',
-        ];
-        $entityManager = EntityManager::create($connectionParams, $config);
+        if ($this->em) {
+            return $this->em;
+        }
+        $config = Setup::createAnnotationMetadataConfiguration([__DIR__."/src/Entities"], $this->isDebug());
+        return $this->em = EntityManager::create($connectionParams, $config);
     }
 
 }
