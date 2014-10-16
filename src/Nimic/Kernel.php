@@ -30,12 +30,6 @@ abstract class Kernel extends NimiKernel
         return $extensions;
     }
 
-    protected function addKernelParametersToContainer($container)
-    {
-        parent::addKernelParametersToContainer($container);
-        $this->loadConfigResourcesIntoContainer($container);
-    }
-
     /**
      * @param array $connectionParams
      * @return \Doctrine\ORM\EntityManager
