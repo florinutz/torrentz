@@ -1,0 +1,3 @@
+torrentz:
+    doctrine:
+        password: yourMysqlPassword
