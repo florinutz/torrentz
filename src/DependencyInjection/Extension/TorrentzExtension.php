@@ -4,6 +4,7 @@ namespace Flo\Torrentz\DependencyInjection\Extension;
 
 use Flo\Torrentz\DependencyInjection\Extension\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Config\FileLocator;

@@ -13,4 +13,8 @@
             <parameter key="driver">pdo_mysql</parameter>
         </parameter>
     </parameters>
+
+    <services>
+        <service id="em" synthetic="true" />
+    </services>
 </container>

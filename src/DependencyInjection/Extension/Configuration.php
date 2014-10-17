@@ -36,7 +36,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->info('Doctrine config')
             ->children()
-                ->scalarNode('driver')->defaultValue('mysql')->end()
+                ->scalarNode('driver')->defaultValue('pdo_mysql')->end()
                 ->scalarNode('host')->defaultValue('localhost')->end()
                 ->scalarNode('username')->defaultValue('root')->end()
                 ->scalarNode('password')->defaultValue('')->end()

@@ -44,4 +44,12 @@ abstract class Kernel extends NimiKernel
         return $this->em = EntityManager::create($connectionParams, $config);
     }
 
+    public function getContainer()
+    {
+        $container = parent::getContainer();
+        $emParams = $container->getParameter('db.config');
+        $container->set('em', $this->getEntityManager($emParams));
+        return $container;
+    }
+
 }
