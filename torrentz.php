@@ -14,5 +14,6 @@ class MyKernel extends Flo\Torrentz\Nimic\Kernel
 }
 
 $kernel = new \MyKernel();
-$params = $kernel->getContainer()->getParameterBag()->all();
+/** @var \Doctrine\ORM\EntityManager $em */
+$em = $kernel->getContainer()->get('em');
 $kernel->getApplication()->run();
