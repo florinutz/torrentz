@@ -3,6 +3,7 @@ require "vendor/autoload.php";
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 class MyKernel extends Flo\Torrentz\Nimic\Kernel
 {
@@ -14,6 +15,10 @@ class MyKernel extends Flo\Torrentz\Nimic\Kernel
 }
 
 $kernel = new \MyKernel();
+
+$app = $kernel->getApplication();
+
 /** @var \Doctrine\ORM\EntityManager $em */
 $em = $kernel->getContainer()->get('em');
-$kernel->getApplication()->run();
+
+$app->run();

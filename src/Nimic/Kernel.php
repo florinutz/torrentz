@@ -2,11 +2,13 @@
 // florin, 10/9/14, 7:54 PM
 namespace Flo\Torrentz\Nimic;
 
+use Flo\Nimic\Console\Application;
+use Flo\Torrentz\DependencyInjection\CompilerPass\DoctrineCompilerPass;
 use Flo\Nimic\Kernel\NimiKernel;
 use Flo\Torrentz\DependencyInjection\Extension\TorrentzExtension;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 abstract class Kernel extends NimiKernel
 {
@@ -30,9 +32,16 @@ abstract class Kernel extends NimiKernel
         return $extensions;
     }
 
+    protected function getCompilerPasses()
+    {
+        $cPasses = parent::getCompilerPasses();
+        $cPasses[] = new DoctrineCompilerPass('app');
+        return $cPasses;
+    }
+
     /**
      * @param array $connectionParams
-     * @return \Doctrine\ORM\EntityManager
+     * @return EntityManager
      * @throws \Doctrine\ORM\ORMException
      */
     protected function getEntityManager(array $connectionParams)
@@ -40,7 +49,7 @@ abstract class Kernel extends NimiKernel
         if ($this->em) {
             return $this->em;
         }
-        $config = Setup::createAnnotationMetadataConfiguration([__DIR__."/src/Entities"], $this->isDebug());
+        $config = Setup::createAnnotationMetadataConfiguration([__DIR__."/../../src/Entity"], $this->isDebug());
         return $this->em = EntityManager::create($connectionParams, $config);
     }
 
@@ -48,7 +57,10 @@ abstract class Kernel extends NimiKernel
     {
         $container = parent::getContainer();
         $emParams = $container->getParameter('db.config');
-        $container->set('em', $this->getEntityManager($emParams));
+
+        $entityManager = $this->getEntityManager($emParams);
+        $container->set('em', $entityManager);
+
         return $container;
     }
 
