@@ -55,6 +55,10 @@ abstract class Kernel extends NimiKernel
 
     public function getContainer()
     {
+        if ($this->container) {
+            return $this->container;
+        }
+
         $container = parent::getContainer();
         $emParams = $container->getParameter('db.config');
 

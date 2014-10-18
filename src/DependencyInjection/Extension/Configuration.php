@@ -38,9 +38,9 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('driver')->defaultValue('pdo_mysql')->end()
                 ->scalarNode('host')->defaultValue('localhost')->end()
-                ->scalarNode('username')->defaultValue('root')->end()
+                ->scalarNode('user')->defaultValue('root')->end()
                 ->scalarNode('password')->defaultValue('')->end()
-                ->booleanNode('dbname')->defaultValue('torrentz')->end()
+                ->scalarNode('dbname')->defaultValue('torrentz')->end()
             ->end()
         ;
     }
