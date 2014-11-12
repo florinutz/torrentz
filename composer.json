@@ -5,13 +5,19 @@
         "symfony/stopwatch": "~2.5",
         "symfony/yaml": "2.*",
         "symfony/dom-crawler": "~2.5",
-        "guzzlehttp/guzzle": "4.*",
+        "guzzlehttp/guzzle": "~5.0",
         "guzzlehttp/log-subscriber": "~1.0",
         "guzzlehttp/cache-subscriber": "0.1.*@dev",
-        "guzzlehttp/retry-subscriber": "~1.0",
         "doctrine/orm": "2.4.*"
     },
     "autoload": {
-        "psr-4": {"Flo\\Torrentz\\": "src/"}
+        "psr-4": {
+            "Flo\\Torrentz\\": "src/",
+            "Flo\\Torrentz\\Test\\": "test/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.3.*",
+        "phpunit/dbunit": ">=1.2"
     }
 }

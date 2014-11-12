@@ -5,6 +5,7 @@ namespace Flo\Torrentz\Nimic;
 use Flo\Nimic\Console\Application;
 use Flo\Torrentz\DependencyInjection\CompilerPass\DoctrineCompilerPass;
 use Flo\Nimic\Kernel\NimiKernel;
+use Flo\Torrentz\DependencyInjection\CompilerPass\TorrentzCompilerPass;
 use Flo\Torrentz\DependencyInjection\Extension\TorrentzExtension;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
@@ -36,6 +37,7 @@ abstract class Kernel extends NimiKernel
     {
         $cPasses = parent::getCompilerPasses();
         $cPasses[] = new DoctrineCompilerPass('app');
+        $cPasses[] = new TorrentzCompilerPass('app');
         return $cPasses;
     }
 
