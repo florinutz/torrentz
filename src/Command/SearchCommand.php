@@ -2,6 +2,7 @@
 // florin 11/12/14 3:46 PM
 namespace Flo\Torrentz\Command;
 
+use GuzzleHttp\Client as GuzzleClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,8 +27,10 @@ class SearchCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('query');
-        $output->writeln($name);
+        $searched = $input->getArgument('query');
+        $output->writeln($searched);
+        $client = new GuzzleClient(['base_url' => 'https://torrentz.eu/']);
+        return;
     }
 
 }
