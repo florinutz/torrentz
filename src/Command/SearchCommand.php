@@ -12,6 +12,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 class SearchCommand extends Command
 {
 
@@ -39,9 +41,14 @@ class SearchCommand extends Command
         $request = $client->createRequest('GET', '/links/100/89', ['future' => true]);
         $response = $client->send( $request );
         $response->then(
-            function($response) {
+            function($response) use($output) {
                 /** @var Response $response */
-                echo 'Success: ' . $response->getStatusCode() . ': ' . $response->getBody();
+                $bodyStr = (string) $response->getBody();
+                $crawler = new Crawler($bodyStr);;
+                foreach ($crawler->filter('body > a') as $domElement) {
+                    /** @var \DOMElement $domElement */
+                    $output->writeln($domElement->nodeValue . " ({$domElement->nodeName})");
+                }
                 return $response;
             },
             function($error) {
