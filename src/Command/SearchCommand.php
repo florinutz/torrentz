@@ -37,8 +37,8 @@ class SearchCommand extends Command
         $client = new GuzzleClient(['base_url' => 'http://dubios.ro:8000', 'defaults' => [
             'headers' => ['User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36']
         ]]);
-        /** @var FutureResponse $response */
         $request = $client->createRequest('GET', '/links/100/89', ['future' => true]);
+        /** @var FutureResponse $response */
         $response = $client->send( $request );
         $response->then(
             function($response) use($output) {
