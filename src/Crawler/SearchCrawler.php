@@ -19,7 +19,7 @@ class SearchCrawler extends SymfonyCrawler
 {
     protected function getTorrents(TagsHandler $tagsHandler)
     {
-        $torrents = $this->filter('div.results > dl')->each(function (Crawler $node) use($tagsHandler) {
+        $torrents = $this->filter('div.results > dl')->each(function (SymfonyCrawler $node) use($tagsHandler) {
             try {
                 $title = $node->filter('a')->text();
                 $url = $node->filter('a')->extract('href');
@@ -60,7 +60,7 @@ class SearchCrawler extends SymfonyCrawler
      * @throws \InvalidArgumentException
      * @return mixed
      */
-    protected function getNumberOfSearchResults()
+    public function getNumberOfSearchResults()
     {
         $text = $node = $this->filter('div.results > h2')->text();
         if (!preg_match('/^(\d{1,3}([,.]?\d{1,3})*)/i', $text, $matches)) {

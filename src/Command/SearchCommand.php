@@ -44,7 +44,7 @@ class SearchCommand extends Command
             function($response) use($output) {
                 /** @var Response $response */
                 $bodyStr = (string) $response->getBody();
-                $crawler = new Crawler($bodyStr);;
+                $crawler = new Crawler($bodyStr);
                 foreach ($crawler->filter('body > a') as $domElement) {
                     /** @var \DOMElement $domElement */
                     $output->writeln($domElement->nodeValue . " ({$domElement->nodeName})");

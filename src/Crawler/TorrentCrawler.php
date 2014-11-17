@@ -1,7 +1,7 @@
 <?php
 // florin 9/9/14 7:49 PM
 
-namespace Dubios\Torrentz\CrawlerBundle\Client\Crawler;
+namespace Flo\Torrentz\Crawler;
 
 use Flo\Torrentz\Crawler\Util\TagsHandler;
 use Flo\Torrentz\Entity\Repository\TagRepository;
@@ -149,7 +149,7 @@ class TorrentCrawler extends SymfonyCrawler
 
     public function getTagNames(TagsHandler $tagsHandler)
     {
-        $multi = $this->filter('div.download dt > a')->each(function (Crawler $node) {
+        $multi = $this->filter('div.download dt > a')->each(function (SymfonyCrawler $node) {
             $html = $node->html();
             $split = preg_split('/\<\/span\>/i', $html, null, PREG_SPLIT_DELIM_CAPTURE);
             $tagsText = trim(end($split));
@@ -258,7 +258,7 @@ class TorrentCrawler extends SymfonyCrawler
     public function getShortestTitle()
     {
         $shortestTitle = false;
-        $this->filter('div.download > dl span.n')->each(function (Crawler $node) use (&$shortestTitle) {
+        $this->filter('div.download > dl span.n')->each(function (SymfonyCrawler $node) use (&$shortestTitle) {
             $text = $node->text();
             if (!$shortestTitle || strlen($shortestTitle) > strlen($text)) {
                 $shortestTitle = $text;
