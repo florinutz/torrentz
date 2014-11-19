@@ -27,20 +27,18 @@ class SearchCommand extends Command
                 InputArgument::REQUIRED,
                 'What are we searching for?'
             )
-            ->addOption('domain', null, InputOption::VALUE_OPTIONAL, 'Domain part of url', 'https://torrentz.eu/')
+            ->addOption('domain', null, InputOption::VALUE_OPTIONAL, 'Domain part of url', 'http://dubios.ro:8000'/*'https://torrentz.eu/'*/)
+            ->addOption('ua', null, InputOption::VALUE_OPTIONAL, 'User agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $searched = $input->getArgument('query');
-        $client = new GuzzleClient(['base_url' => 'http://dubios.ro:8000', 'defaults' => [
-            'headers' => ['User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36']
-        ]]);
+        $client = new GuzzleClient(['base_url' => $input->getOption('domain'), 'defaults' => ['headers' => ['User-Agent' => $input->getOption('ua')]]]);
         $request = $client->createRequest('GET', '/links/100/89', ['future' => true]);
         /** @var FutureResponse $response */
-        $response = $client->send( $request );
-        $response->then(
+        $response = $client->send($request)->then(
             function($response) use($output) {
                 /** @var Response $response */
                 $bodyStr = (string) $response->getBody();

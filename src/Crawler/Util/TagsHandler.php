@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class TagsHandler implements LoggerAwareInterface, ContainerAwareInterface
+class TagsHandler implements LoggerAwareInterface
 {
     /**
      * Splits the tags string
@@ -77,12 +77,9 @@ class TagsHandler implements LoggerAwareInterface, ContainerAwareInterface
         return $result;
     }
 
-    //region container-logger
+    //region logger
     /** @var LoggerInterface */
     protected $logger;
-
-    /** @var ContainerInterface */
-    protected $container;
 
     /**
      * Sets a logger instance on the object
@@ -93,18 +90,6 @@ class TagsHandler implements LoggerAwareInterface, ContainerAwareInterface
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
-    }
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
     //endregion
 }
