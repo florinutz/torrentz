@@ -18,9 +18,9 @@ class SearchCrawlerTest extends \PHPUnit_Framework_TestCase
     public function testNumberOfSearchResults()
     {
         $is = $this->crawler->getNumberOfSearchResults();
-        $shouldBe = 806848;
+        $shouldBe = 716459;
         $this->assertEquals($shouldBe, $is, 'Results number is ok');
         $this->assertInternalType("int", $is, "Results number is integer");
     }
 
-} 
+}
