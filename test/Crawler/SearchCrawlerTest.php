@@ -11,7 +11,8 @@ class SearchCrawlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $html = file_get_contents(__DIR__ . '/../data/movie_search.html');
+	    $sourceLocation = __DIR__ . '/../data/movie_search.html';
+	    $html = file_get_contents( $sourceLocation );
         $this->crawler = new SearchCrawler($html);
     }
 

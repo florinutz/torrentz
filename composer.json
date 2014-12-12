@@ -8,7 +8,7 @@
         "symfony/css-selector": "~2.5",
         "guzzlehttp/guzzle": "~5.0",
         "guzzlehttp/log-subscriber": "~1.0",
-        "guzzlehttp/cache-subscriber": "0.1.*@dev",
+        "guzzlehttp/cache-subscriber": "0.2.*@dev",
         "doctrine/orm": "2.4.*"
     },
     "autoload": {
