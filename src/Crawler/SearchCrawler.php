@@ -3,7 +3,7 @@
 
 namespace Flo\Torrentz\Crawler;
 
-use Flo\Torrentz\Crawler\Util\TagsHandler;
+use Doctrine\Common\Persistence\ObjectManager;
 use Flo\Torrentz\Entity\Repository\TagRepository;
 use Flo\Torrentz\Entity\Tag;
 use Flo\Torrentz\Entity\Torrent;
@@ -17,9 +17,9 @@ use Symfony\Component\DomCrawler\Crawler as SymfonyCrawler;
  */
 class SearchCrawler extends SymfonyCrawler
 {
-    protected function getTorrents(TagsHandler $tagsHandler)
+    public function getTorrents()
     {
-        $torrents = $this->filter('div.results > dl')->each(function (SymfonyCrawler $node) use($tagsHandler) {
+        $torrents = $this->filter('div.results > dl')->each(function (SymfonyCrawler $node) {
             try {
                 $title = $node->filter('a')->text();
                 $url = $node->filter('a')->extract('href');
@@ -27,7 +27,7 @@ class SearchCrawler extends SymfonyCrawler
                     $url = $url[0];
                 }
                 $hash = substr($url, 1); //remove dash
-                $rating = $node->filter('dd > .v')->text();
+                $rating = (int) $node->filter('dd > .v')->text();
                 $date = new \DateTime($node->filter('dd > .a > span')->attr('title'));
                 $size = $node->filter('dd > .s')->text();
                 $peers = str_replace(',', '', $node->filter('dd > .u')->text());
@@ -37,6 +37,7 @@ class SearchCrawler extends SymfonyCrawler
             } catch (\InvalidArgumentException $e) {
                 return false;
             }
+
             $torrent = new Torrent();
             $torrent
                 ->setHash($hash)
@@ -46,9 +47,13 @@ class SearchCrawler extends SymfonyCrawler
                 ->setSize($size)
                 ->setPeers((int)$peers)
                 ->setLeechers((int)$leechers);
-            // no flush for new tags:
-            $tagNames = $tagsHandler->splitTags($tagsString);
-            $tagsHandler->addTagsToTorrent($tagNames, $torrent, true);
+
+            $tags = $this->getTags($tagsString);
+            foreach ($tags as $tag) {
+                /** @var Tag $tag */
+                $torrent->addTag($tag);
+            }
+
             return $torrent;
         });
         return $torrents;
@@ -69,5 +74,42 @@ class SearchCrawler extends SymfonyCrawler
         $text = str_replace(',', '', $matches[0]);
         $number = (int)$text;
         return $number;
+    }
+
+    /**
+     * Splits the tags string
+     *
+     * @param $string
+     * @throws \InvalidArgumentException
+     * @return array|boolean
+     */
+    protected function splitTagsString($string)
+    {
+        if (!is_string($string)) {
+            throw new \InvalidArgumentException('Invalid tags argument');
+        }
+        $string = trim($string);
+        $split = preg_split("/[\s,]+/", $string, -1, PREG_SPLIT_NO_EMPTY);
+        return $split;
+    }
+
+    /**
+     * @param $tagNames array array of tag names
+     * @param TagRepository $repo
+     * @return array of tags
+     */
+    protected function getTags($tagsString, TagRepository $repo = null)
+    {
+        $tagNames = $this->splitTagsString($tagsString);
+        if ($repo) {
+            $tagNames = $repo->getTagObjects($tagNames);
+            return $tagNames;
+        }
+        $result = [];
+        foreach ($tagNames as $name) {
+            $tag = new Tag($name);
+            $result[] = $tag;
+        }
+        return $result;
     }
 }

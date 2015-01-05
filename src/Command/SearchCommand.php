@@ -2,6 +2,7 @@
 // florin 11/12/14 3:46 PM
 namespace Flo\Torrentz\Command;
 
+use Flo\Torrentz\Entity\Torrent;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\FutureResponse;
@@ -12,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Symfony\Component\DomCrawler\Crawler;
+use Flo\Torrentz\Crawler\SearchCrawler;
 
 class SearchCommand extends Command
 {
@@ -27,7 +28,7 @@ class SearchCommand extends Command
                 InputArgument::REQUIRED,
                 'What are we searching for?'
             )
-            ->addOption('domain', null, InputOption::VALUE_OPTIONAL, 'Domain part of url', 'http://dubios.ro:8000'/*'https://torrentz.eu/'*/)
+            ->addOption('domain', null, InputOption::VALUE_OPTIONAL, 'Domain part of url', 'https://torrentz.eu/')
             ->addOption('ua', null, InputOption::VALUE_OPTIONAL, 'User agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36')
         ;
     }
@@ -36,16 +37,20 @@ class SearchCommand extends Command
     {
         $searched = $input->getArgument('query');
         $client = new GuzzleClient(['base_url' => $input->getOption('domain'), 'defaults' => ['headers' => ['User-Agent' => $input->getOption('ua')]]]);
-        $request = $client->createRequest('GET', '/links/100/89', ['future' => true]);
+        $request = $client->createRequest('GET', 'search', ['future' => true, 'query' => ['q' => htmlentities($input->getArgument('query'))]]);
         /** @var FutureResponse $response */
         $response = $client->send($request)->then(
             function($response) use($output) {
                 /** @var Response $response */
                 $bodyStr = (string) $response->getBody();
-                $crawler = new Crawler($bodyStr);
-                foreach ($crawler->filter('body > a') as $domElement) {
-                    /** @var \DOMElement $domElement */
-                    $output->writeln($domElement->nodeValue . " ({$domElement->nodeName})");
+                $crawler = new SearchCrawler($bodyStr);
+                $searchResults = $crawler->getNumberOfSearchResults();
+                $torrents = $crawler->getTorrents();
+                foreach ($torrents as $torrent) {
+                    /** @var Torrent $torrent */
+                    if (!$torrent->getId()) {
+
+                    }
                 }
                 return $response;
             },
