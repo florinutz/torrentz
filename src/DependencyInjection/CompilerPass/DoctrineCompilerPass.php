@@ -25,16 +25,12 @@ class DoctrineCompilerPass implements CompilerPassInterface
     {
         if ($container->hasDefinition($this->appId)) {
             $def = $container->getDefinition($this->appId);
-
             $def->setConfigurator(function(Application $app) use ($container) {
                 $em = $container->get('em');
-
                 $helperSet = ConsoleRunner::createHelperSet($em);
                 $app->setHelperSet($helperSet);
-
                 ConsoleRunner::addCommands($app);
             });
-
         }
     }
 }

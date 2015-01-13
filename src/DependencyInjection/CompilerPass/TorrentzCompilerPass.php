@@ -27,6 +27,7 @@ class TorrentzCompilerPass implements CompilerPassInterface
             $def = $container->getDefinition($this->appId);
             $def->setConfigurator(function(Application $app) use ($container) {
                 $app->add(new SearchCommand());
+                $app->setContainer($container);
             });
         }
     }

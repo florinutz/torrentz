@@ -19,24 +19,20 @@ class SearchCrawler extends SymfonyCrawler
 {
     public function getTorrents()
     {
-        $torrents = $this->filter('div.results > dl')->each(function (SymfonyCrawler $node) {
-            try {
-                $title = $node->filter('a')->text();
-                $url = $node->filter('a')->extract('href');
-                if (is_array($url)) {
-                    $url = $url[0];
-                }
-                $hash = substr($url, 1); //remove dash
-                $rating = (int) $node->filter('dd > .v')->text();
-                $date = new \DateTime($node->filter('dd > .a > span')->attr('title'));
-                $size = $node->filter('dd > .s')->text();
-                $peers = str_replace(',', '', $node->filter('dd > .u')->text());
-                $leechers = str_replace(',', '', $node->filter('dd > .d')->text());
-                $dtText = $node->filter('dt')->text();
-                $tagsString = trim(substr($dtText, strpos($dtText, '»') + 2));
-            } catch (\InvalidArgumentException $e) {
-                return false;
+        $torrents = $this->filter('div.results > dl:has(a)')->each(function (SymfonyCrawler $node) {
+            $title = $node->filter('a')->text();
+            $url = $node->filter('a')->extract('href');
+            if (is_array($url)) {
+                $url = $url[0];
             }
+            $hash = substr($url, 1); //remove dash
+            $rating = (int) $node->filter('dd > .v')->text();
+            $date = new \DateTime($node->filter('dd > .a > span')->attr('title'));
+            $size = $node->filter('dd > .s')->text();
+            $peers = str_replace(',', '', $node->filter('dd > .u')->text());
+            $leechers = str_replace(',', '', $node->filter('dd > .d')->text());
+            $dtText = $node->filter('dt')->text();
+            $tagsString = trim(substr($dtText, strpos($dtText, '»') + 2));
 
             $torrent = new Torrent();
             $torrent
@@ -56,6 +52,7 @@ class SearchCrawler extends SymfonyCrawler
 
             return $torrent;
         });
+
         return $torrents;
     }
 

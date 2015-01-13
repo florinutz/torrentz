@@ -2,6 +2,8 @@
 // florin 11/12/14 3:46 PM
 namespace Flo\Torrentz\Command;
 
+use Doctrine\ORM\EntityManager;
+use Flo\Nimic\Console\Application;
 use Flo\Torrentz\Entity\Torrent;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
@@ -14,6 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Flo\Torrentz\Crawler\SearchCrawler;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SearchCommand extends Command
 {
@@ -36,8 +39,16 @@ class SearchCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $searched = $input->getArgument('query');
+        /** @var Application $app */
+        $app = $this->getApplication();
+        /** @var ContainerBuilder $container */
+        $container = $app->getContainer();
+        /** @var EntityManager $em */
+        $em = $container->get('em');
+
         $client = new GuzzleClient(['base_url' => $input->getOption('domain'), 'defaults' => ['headers' => ['User-Agent' => $input->getOption('ua')]]]);
         $request = $client->createRequest('GET', 'search', ['future' => true, 'query' => ['q' => htmlentities($input->getArgument('query'))]]);
+
         /** @var FutureResponse $response */
         $response = $client->send($request)->then(
             function($response) use($output) {
@@ -48,9 +59,6 @@ class SearchCommand extends Command
                 $torrents = $crawler->getTorrents();
                 foreach ($torrents as $torrent) {
                     /** @var Torrent $torrent */
-                    if (!$torrent->getId()) {
-
-                    }
                 }
                 return $response;
             },
